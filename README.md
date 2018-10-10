@@ -11,13 +11,13 @@ Provide enterprise grade tool to visualize the data.
 # Tasks
 
 1. Obtain Purple Air data feed from https://github.com/bomeara/purpleairpy/blob/master/api.md
-2. Sample 4 devices [lists.json](./lists.json)
+2. Sample 4 devices [devices.json](./devices.json)
 3. Post datafeed to IOTBCH API
-* Create a template from the json datafeed. 
+* Create a template from the json datafeed.
 * Compress the datafeed.
 * Store the template on database AWS.
 * Push compressed data to BCH testnet in the OP_RETURN field
 4. Reconstruction
-* Retrieve compressed data from BCH OP_RETURN. 
+* Retrieve compressed data from BCH OP_RETURN.
 * Retrieve template from AWS to reconstruct original datafeed in json.
 5. Analytics tool to visualize reconstructed datafeed

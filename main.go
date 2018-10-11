@@ -82,6 +82,7 @@ func main() {
 
 	logrus.Info("Starting metric fetching daemon")
 	for _, device := range deviceList {
+		time.Sleep(time.Duration(5) * time.Second)
 		go func(device *PurpleAir) {
 			var end *time.Time
 			for {

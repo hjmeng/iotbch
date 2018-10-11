@@ -1,6 +1,7 @@
 var PROTO_PATH = __dirname + '/protobuf/metrics.proto';
 var grpc = require('grpc');
 var protoLoader = require('@grpc/proto-loader');
+var util = require('./utility.js');
 var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -11,9 +12,20 @@ var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 var protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 var deviceMetrics = protoDescriptor.DeviceMetrics;
 
-function addDeviceMetrics(call) {
-  // TODO: do something w/ this data
-  console.log(call.request);
+async function addDeviceMetrics(call) {
+  message = call.request.feed[0];
+  console.log(message);
+  try {
+    var tx = await util.sendTX({
+      "blockchain": 'BCH',
+      "to_addr": "qr8ngds6j7ww428mud7fz376z5vj0dn4mgx32xuv9a",
+      "message": "IoT"+message
+    });
+    var txid = tx.id;
+  } catch (error) {
+    console.log(error);
+  }
+  console.log(txid);
 }
 
 var Server = new grpc.Server();

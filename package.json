@@ -1,19 +1,22 @@
 {
   "name": "iotbch",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "BCHDevcon Hackathon Project",
+  "main": "rpc.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@grpc/proto-loader": "^0.3.0",
     "bchaddrjs": "^0.2.2",
     "bitcoin-core": "^2.0.0",
     "bitcoincashjs": "^0.1.10",
     "dashcore-lib": "^8.2.3",
     "dotenv": "^6.1.0",
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "google-protobuf": "^3.6.1",
+    "grpc": "^1.15.1"
   }
 }

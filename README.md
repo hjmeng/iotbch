@@ -28,7 +28,7 @@ Provide enterprise grade tool to analyze and visualize the data.
 - [x] Push compressed data to BCH testnet in the OP_RETURN field
 - [ ] Reconstruct feed from BCH OP_RETURN
 - [x] Analytics tool to visualize datafeed [Live Dashboad](https://public.tableau.com/profile/michael5102#!/)
-- Most polluted day of the week
+- [Most polluted day of the week](./visualization_01.png)
 - Air quality map
 - Hourly air quality index distribution by device
 - Pm2.5 Avg levels with max spike

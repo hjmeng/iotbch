@@ -1,0 +1,19 @@
+{
+  "name": "iotbch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bchaddrjs": "^0.2.2",
+    "bitcoin-core": "^2.0.0",
+    "bitcoincashjs": "^0.1.10",
+    "dashcore-lib": "^8.2.3",
+    "dotenv": "^6.1.0",
+    "express": "^4.16.4"
+  }
+}

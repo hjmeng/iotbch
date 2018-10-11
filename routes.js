@@ -1,4 +1,3 @@
-var faker = require("faker");
 var util = require('./utility.js');
 
 var appRouter = function (app) {

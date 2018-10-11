@@ -27,11 +27,14 @@ async function addDeviceMetrics(call) {
     message = feed.serializeBinary();
   });
 
+    var buf_pre = Buffer.from('IoT');
+    var buf_message = Buffer.from(message);
+    var buf = Buffer.concat([buf_pre, buf_message]);
   try {
     var tx = await util.sendTX({
       "blockchain": 'BCH',
       "to_addr": "qr8ngds6j7ww428mud7fz376z5vj0dn4mgx32xuv9a",
-      "message": "IoT"+message
+      "message": buf
     });
     var txid = tx.id;
   } catch (error) {

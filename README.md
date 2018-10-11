@@ -30,6 +30,10 @@ Provide enterprise grade tool to analyze and visualize the data.
 - [x] Analytics tool to visualize datafeed [Dashboad](https://public.tableau.com/profile/michael5102#!/)
 - Most polluted day of the week
 - Air quality map
+- Hourly air quality index distribution by device
+- Air quality index heat map
+- Pm2.5 Levels by device
+
 
 ![Dashboard](./dashboard.png)
 

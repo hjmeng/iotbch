@@ -15,7 +15,7 @@ Provide enterprise grade tool to analyze and visualize the data.
 
 # Benefits
 * Permanent storage on BCH for user generated IoT data
-* Bring ETL tool to BCH to organize the OP_RETURN
+* Bring Data Integration (ETL) framework to BCH to organize the OP_RETURN
 * Personalized analytics
 
 # Tasks for Hackathon

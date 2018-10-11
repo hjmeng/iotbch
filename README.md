@@ -5,7 +5,7 @@ BCHDevcon 2019 Hackathon Project
 
 # Introduction
 
-Internet of Things (IoT) is gaining popularity. A good example is PurpleAir.com. Users buy a PurpleAir air pollution monitor and connect to their wifi. The monitor submits PM2.5 data to PurpleAir server. However, the user does not have many options when it comes to analyzing their own data or their neighborhood data.
+Internet of Things (IoT) is gaining popularity. A good example is [PurpleAir.com](https://www.purpleair.com/map#12.58/37.43558/-122.15637). Users buy a PurpleAir air pollution monitor and connect it to their wifi. The monitor submits PM2.5 data to PurpleAir server periodically. However, the user does not have many options when it comes to analyzing their own data or their neighborhood's data.
 
 # Goal
 
@@ -16,6 +16,7 @@ Provide enterprise grade tool to analyze and visualize the data.
 # Benefits
 * Permanent storage on BCH for user generated IoT data
 * Bring ETL tool to BCH to organize the OP_RETURN
+* Personalized analytics 
 
 # Tasks for Hackathon
 

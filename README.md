@@ -40,6 +40,28 @@ Provide enterprise grade tool to analyze and visualize the data.
 1. compile feed fetcher daemon `GOOS=linux GOARCH=amd64 go build -o publish-feed-linux-amd64 .`
 2. run `./publish-feed-linux-amd64`
 
+
+# `OP_RETURN` schema + compression
+
+For PurpleAir metrics we store a Protobuf binary serialized representation of
+the following:
+
+```
+{
+  device: "AirMonitor_1f12",
+  id: 123,
+  lat: 37.435972,
+  lon: -122.129822,
+  temp_f: 87,
+  feed: [
+    { ts: <start unix time>, pm2.5: <float> },
+    { ts: <diff from start unix time>, pm2.5: <float> },
+    { ts: <diff from start unix time>, pm2.5: <float> },
+    ...
+  ]
+}
+```
+
 # Examples
 
 ```

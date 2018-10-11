@@ -9,9 +9,9 @@ Internet of Things (IoT) is gaining popularity. A good example is [PurpleAir.com
 
 # Goal
 
-Provide a simple API for any IoT devices or clients to post time series data to BCH.
-Compress the raw IoT data to fully utilize the OP_RETURN field at 50% saving, 38 samples per tx. 
-Provide enterprise grade tool to analyze and visualize the data.
+* Provide a simple API for any IoT devices or clients to post time series data to BCH.
+* Compress the raw IoT data to fully utilize the OP_RETURN field at 50% saving, 38 samples per tx. 
+* Provide enterprise grade tool to analyze and visualize the data.
 
 # Benefits
 * Permanent storage on BCH for user generated IoT data

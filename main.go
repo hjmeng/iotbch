@@ -5,12 +5,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	"google.golang.org/grpc"
 
+	"github.com/Sirupsen/logrus"
 	pb "github.com/deepthawtz/iotbch/protobuf"
 )
 
@@ -60,21 +63,29 @@ type FeedItem struct {
 func main() {
 	data, err := ioutil.ReadFile("devices.json")
 	if err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 
 	var deviceList []*PurpleAir
 	if err := json.Unmarshal(data, &deviceList); err != nil {
-		log.Fatal(err)
+		logrus.Fatal(err)
 	}
 
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, syscall.SIGUSR2, syscall.SIGINT)
+	go func() {
+		sig := <-ch
+		logrus.Infof("%s received, shutting down", sig)
+		os.Exit(0)
+	}()
+
 	for {
-		log.Println("Starting metric fetching daemon")
+		logrus.Info("Starting metric fetching daemon")
 		for _, device := range deviceList {
 			var df DeviceFeed
 			channelData, err := fetchChannelData(device)
 			if err != nil {
-				log.Fatal(err)
+				logrus.Fatal(err)
 			}
 			df.ID = device.ID
 			df.Name = channelData.Channel.Name
@@ -99,15 +110,15 @@ func main() {
 			}
 
 			if err := postDeviceMetrics(&df); err != nil {
-				log.Fatal(err)
+				logrus.Fatal(err)
 			}
 
 			// j, err := json.MarshalIndent(df, "", "  ")
 			// if err != nil {
-			// 	log.Fatal(err)
+			// 	logrus.Fatal(err)
 			// }
 			// if err := ioutil.WriteFile(fmt.Sprintf("feeds/%d.json", df.ID), j, 0644); err != nil {
-			// 	log.Fatal(err)
+			// 	logrus.Fatal(err)
 			// }
 		}
 		time.Sleep(time.Duration(3) * time.Minute)
@@ -128,7 +139,7 @@ func fetchChannelData(device *PurpleAir) (*ThingSpeakChannel, error) {
 
 	defer resp.Body.Close()
 
-	log.Printf("GET device channel feed %d [%s]", device.ID, resp.Status)
+	logrus.WithFields(logrus.Fields{"id": device.ID, "status": resp.Status}).Info("GET device channel feed")
 
 	thing := &ThingSpeakChannel{}
 	data, _ := ioutil.ReadAll(resp.Body)
@@ -170,7 +181,9 @@ func postDeviceMetrics(df *DeviceFeed) error {
 	client := pb.NewDeviceMetricsClient(conn)
 	data := buildMetrics(df)
 
-	log.Println("posting metrics to RPC")
-	client.AddDeviceMetrics(context.Background(), data)
+	logrus.WithFields(logrus.Fields{"id": df.ID}).Info("posting metrics to RPC")
+	if _, err := client.AddDeviceMetrics(context.Background(), data); err != nil {
+		return err
+	}
 	return nil
 }

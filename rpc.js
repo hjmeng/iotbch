@@ -13,7 +13,7 @@ var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
 var protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 var deviceMetrics = protoDescriptor.DeviceMetrics;
 
-async function addDeviceMetrics(call) {
+async function addDeviceMetrics(call, callback) {
   var feed = new pb.Feed;
   feed.setDeviceId(call.request.feed.device_id);
   feed.setTemplateId("purpleair");
@@ -42,6 +42,7 @@ async function addDeviceMetrics(call) {
     console.log(error);
   }
   console.log(`written bytes=${buf.length} txid=${txid}`);
+  callback(null, null);
 }
 
 var Server = new grpc.Server();

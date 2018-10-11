@@ -69,22 +69,21 @@ the following:
 ```
 { blockchain: 'BCH',
   to_addr: 'qr8ngds6j7ww428mud7fz376z5vj0dn4mgx32xuv9a',
-    message: <Buffer 49 6f 54 0a 09 70 75 72 70 6c 65 61 69 72 10 c9 7d 1a 06 08 a
-    5 b7 fd dd 05 1a 06 08 f5 b7 fd dd 05 1a 06 08 c5 b8 fd dd 05 1a 06 08 95 b9 fd
-    dd 05 1a ... > }
-    { txid: '698f2d7a54219f0df4c40d257fcdec64249e449d75ceac82ab6c3a0b430b4a14',
-      vout: 2,
-        address: 'bchtest:qq3v84fq63r09x2uwrvkf6h0uwzcm93hhutk2md8vn',
-    account: '',
-      scriptPubKey: '76a91422c3d520d446f2995c70d964eaefe3858d9637bf88ac',
-        amount: 0.18750096,
-          confirmations: 18,
-      spendable: true,
-        solvable: true,
-          safe: true }
+  message: <Buffer 49 6f 54 5f 0a 09 70 75 72 70 6c 65 61 69 72 10 c9 75 1a 06 08 d7 95 fe dd 05 1a 02 08 50 1a 03 08 a0 01 1a 03 08 f0 01 1a 03 08 c1 02 1a 03 08 90 03 ... > }
+{ txid: 'e8c5b85518febbbabfad79b90eeb461d82492ee363e34733457509d347f585f7',
+  vout: 2,
+  address: 'bchtest:qrhn96u0epjuf5d7cx3ynkht2460sm7jwcsfhvjax0',
+  account: 'u1',
+  scriptPubKey: '76a914ef32eb8fc865c4d1bec1a249daeb5574f86fd27688ac',
+  amount: 0.001,
+  confirmations: 9978,
+  spendable: true,
+  solvable: true,
+  safe: true }
+written bytes=210 txid=9623c784a57ca650b555e9aa9e9ea59d588a2cf2e5fc498943fa5362b5e9e7c3
 ```
 
 
 ## TXID on testnet
 
-[4531054d6b6a55796110d193b74ccccfde6149ec292d513d2c581aba48e82713](https://www.blocktrail.com/tBCC/tx/4531054d6b6a55796110d193b74ccccfde6149ec292d513d2c581aba48e82713)
+[9623c784a57ca650b555e9aa9e9ea59d588a2cf2e5fc498943fa5362b5e9e7c3](https://www.blocktrail.com/tBCC/tx/9623c784a57ca650b555e9aa9e9ea59d588a2cf2e5fc498943fa5362b5e9e7c3)

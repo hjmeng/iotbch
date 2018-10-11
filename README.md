@@ -23,6 +23,19 @@ Provide enterprise grade tool to visualize the data.
 5. Analytics tool to visualize reconstructed datafeed
 
 
+# Getting Started
+
+## run RPC server
+
+1. `npm install`
+2. `npm run server`
+
+## run daemon to fetch device metrics (in separate tab)
+
+1. compile feed fetcher daemon `GOOS=linux GOARCH=amd64 go build -o publish-feed-linux-amd64 .`
+2. run `./publish-feed-linux-amd64`
+
+
 # Examples
 
 Split Transaction

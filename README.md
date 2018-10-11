@@ -16,7 +16,7 @@ Provide enterprise grade tool to analyze and visualize the data.
 # Benefits
 * Permanent storage on BCH for user generated IoT data
 * Bring ETL tool to BCH to organize the OP_RETURN
-* Personalized analytics 
+* Personalized analytics
 
 # Tasks for Hackathon
 
@@ -40,6 +40,20 @@ Provide enterprise grade tool to analyze and visualize the data.
 ![Dashboard](./dashboard.png)
 
 # Getting Started
+
+## compile protobuf definition
+
+Our RPC server is in JavaScript, it is reponsible for receiving protobuf
+messages (IoT device feed metrics) and creating + broadcasting BCH
+transactions. To generate the JS protobuf stubs:
+
+`protoc protobuf/metrics.proto --js_out=import_style=commonjs:.`
+
+To continually collect and feed the RPC server w/ device feed metrics we wrote
+a Golang daemon to periodically fetch and publish new metrics. To generate the
+Go protobuf stubs:
+
+`protoc protobuf/metrics.proto --go_out=plugins=grpc:.`
 
 ## run RPC server
 

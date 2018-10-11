@@ -31,10 +31,12 @@ Provide enterprise grade tool to analyze and visualize the data.
 - Most polluted day of the week
 - Air quality map
 - Hourly air quality index distribution by device
+- Pm2.5 Avg levels with max spike
 - Air quality index heat map
 - Pm2.5 Levels by device
-
-
+- Pm2.5 Levels by hour
+- Pm2.5 level cluster
+- 
 ![Dashboard](./dashboard.png)
 
 # Getting Started

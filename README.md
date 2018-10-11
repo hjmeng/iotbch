@@ -36,7 +36,7 @@ Provide enterprise grade tool to analyze and visualize the data.
 - Pm2.5 Levels by device
 - Pm2.5 Levels by hour
 - Pm2.5 level cluster
-- 
+
 ![Dashboard](./dashboard.png)
 
 # Getting Started

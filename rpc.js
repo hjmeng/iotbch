@@ -27,9 +27,10 @@ async function addDeviceMetrics(call) {
     message = feed.serializeBinary();
   });
 
-    var buf_pre = Buffer.from('IoT');
-    var buf_message = Buffer.from(message);
-    var buf = Buffer.concat([buf_pre, buf_message]);
+  var buf_pre = Buffer.from('IoT_');
+  var buf_message = Buffer.from(message);
+  var buf = Buffer.concat([buf_pre, buf_message]);
+
   try {
     var tx = await util.sendTX({
       "blockchain": 'BCH',
@@ -40,7 +41,7 @@ async function addDeviceMetrics(call) {
   } catch (error) {
     console.log(error);
   }
-  console.log(txid);
+  console.log(`written bytes=${buf.length} txid=${txid}`);
 }
 
 var Server = new grpc.Server();

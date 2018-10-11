@@ -29,13 +29,13 @@ Provide enterprise grade tool to analyze and visualize the data.
 - [ ] Reconstruct feed from BCH OP_RETURN
 - [x] Analytics tool to visualize datafeed [Live Dashboad](https://public.tableau.com/profile/michael5102#!/)
 - [Most polluted day of the week](./visualization_01.png)
-- Air quality map
-- Hourly air quality index distribution by device
-- Pm2.5 Avg levels with max spike
-- Air quality index heat map
-- Pm2.5 Levels by device
-- Pm2.5 Levels by hour
-- Pm2.5 level cluster
+- [Air quality map](./visualization_01.png)
+- [Hourly air quality index distribution by device](./visualization_01.png)
+- [Pm2.5 Avg levels with max spike](./visualization_01.png)
+- [Air quality index heat map](./visualization_01.png)
+- [Pm2.5 Levels by device](./visualization_01.png)
+- [Pm2.5 Levels by hour](./visualization_01.png)
+- [Pm2.5 level cluster](./visualization_01.png)
 
 ![Dashboard](./dashboard.png)
 

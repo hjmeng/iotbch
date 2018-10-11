@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -79,59 +80,74 @@ func main() {
 		os.Exit(0)
 	}()
 
-	for {
-		logrus.Info("Starting metric fetching daemon")
-		for _, device := range deviceList {
-			var df DeviceFeed
-			channelData, err := fetchChannelData(device)
-			if err != nil {
-				logrus.Fatal(err)
-			}
-			df.ID = device.ID
-			df.Name = channelData.Channel.Name
-			df.Lat = device.Lat
-			df.Lon = device.Lon
-			df.Tempf = device.Tempf
+	logrus.Info("Starting metric fetching daemon")
+	for _, device := range deviceList {
+		go func(device *PurpleAir) {
+			var end *time.Time
+			for {
+				var df DeviceFeed
+				channelData, err := fetchChannelData(device, end)
+				if err != nil {
+					logrus.Fatal(err)
+				}
+				df.ID = device.ID
+				df.Name = channelData.Channel.Name
+				df.Lat = device.Lat
+				df.Lon = device.Lon
+				df.Tempf = device.Tempf
 
-			startTimestamp := channelData.Feed[0].CreatedAt.Unix()
-			for i, f := range channelData.Feed {
-				var t int64
-				if i == 0 {
-					t = f.CreatedAt.Unix()
-				} else {
-					t = f.CreatedAt.Unix() - startTimestamp
+				if len(channelData.Feed) > 0 {
+					startTimestamp := channelData.Feed[0].CreatedAt.Unix()
+					for i, f := range channelData.Feed {
+						var t int64
+						if i == 0 {
+							t = f.CreatedAt.Unix()
+						} else {
+							t = f.CreatedAt.Unix() - startTimestamp
+						}
+
+						item := &FeedItem{
+							Timestamp: t,
+							PM25:      f.PM25,
+						}
+						df.Feed = append(df.Feed, item)
+					}
+
+					if err := postDeviceMetrics(&df); err != nil {
+						logrus.Fatal(err)
+					}
+
+					// j, err := json.MarshalIndent(df, "", "  ")
+					// if err != nil {
+					// 	logrus.Fatal(err)
+					// }
+					// if err := ioutil.WriteFile(fmt.Sprintf("feeds/%d.json", df.ID), j, 0644); err != nil {
+					// 	logrus.Fatal(err)
+					// }
+					end = channelData.Feed[len(channelData.Feed)-1].CreatedAt
 				}
 
-				item := &FeedItem{
-					Timestamp: t,
-					PM25:      f.PM25,
-				}
-				df.Feed = append(df.Feed, item)
+				time.Sleep(time.Duration(6) * time.Minute)
 			}
-
-			if err := postDeviceMetrics(&df); err != nil {
-				logrus.Fatal(err)
-			}
-
-			// j, err := json.MarshalIndent(df, "", "  ")
-			// if err != nil {
-			// 	logrus.Fatal(err)
-			// }
-			// if err := ioutil.WriteFile(fmt.Sprintf("feeds/%d.json", df.ID), j, 0644); err != nil {
-			// 	logrus.Fatal(err)
-			// }
-		}
-		time.Sleep(time.Duration(3) * time.Minute)
+		}(device)
 	}
+
+	select {}
 }
 
 // https://www.mathworks.com/help/thingspeak/readdata.html
-func thingspeakURL(channelID, channelKey string) string {
-	return fmt.Sprintf("%s/channels/%s/feeds.json?api_key=%s&results=38", thingspeakBaseURL, channelID, channelKey)
+func thingspeakURL(channelID, channelKey string, end *time.Time) string {
+	url := fmt.Sprintf("%s/channels/%s/feeds.json", thingspeakBaseURL, channelID)
+	url += fmt.Sprintf("?api_key=%s", channelKey)
+	url += "&results=38"
+	if end != nil {
+		url += fmt.Sprintf("&start=%s", strings.Join([]string{end.Format("2006-01-02"), "%20", end.Format("15:04:05")}, ""))
+	}
+	return url
 }
 
-func fetchChannelData(device *PurpleAir) (*ThingSpeakChannel, error) {
-	url := thingspeakURL(device.ThingspeakPrimaryID, device.ThingspeakPrimaryIDReadKey)
+func fetchChannelData(device *PurpleAir, end *time.Time) (*ThingSpeakChannel, error) {
+	url := thingspeakURL(device.ThingspeakPrimaryID, device.ThingspeakPrimaryIDReadKey, end)
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
@@ -139,14 +155,14 @@ func fetchChannelData(device *PurpleAir) (*ThingSpeakChannel, error) {
 
 	defer resp.Body.Close()
 
-	logrus.WithFields(logrus.Fields{"id": device.ID, "status": resp.Status}).Info("GET device channel feed")
-
-	thing := &ThingSpeakChannel{}
+	t := &ThingSpeakChannel{}
 	data, _ := ioutil.ReadAll(resp.Body)
-	if err := json.Unmarshal(data, &thing); err != nil {
+	if err := json.Unmarshal(data, &t); err != nil {
 		return nil, err
 	}
-	return thing, nil
+	logrus.WithFields(logrus.Fields{"id": device.ID, "url": url, "count": len(t.Feed), "status": resp.Status}).Info("GET device channel feed")
+
+	return t, nil
 }
 
 func buildMetrics(df *DeviceFeed) *pb.Device {

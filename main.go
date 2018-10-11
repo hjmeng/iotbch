@@ -68,39 +68,53 @@ func main() {
 		log.Fatal(err)
 	}
 
-	for _, device := range deviceList {
-		var df DeviceFeed
-		channelData, err := fetchChannelData(device)
-		if err != nil {
-			log.Fatal(err)
-		}
-		df.ID = device.ID
-		df.Name = channelData.Channel.Name
-		df.Lat = device.Lat
-		df.Lon = device.Lon
-		df.Tempf = device.Tempf
-		for _, f := range channelData.Feed {
-			item := &FeedItem{
-				Timestamp: f.CreatedAt.Unix(),
-				PM25:      f.PM25,
+	for {
+		log.Println("Starting metric fetching daemon")
+		for _, device := range deviceList {
+			var df DeviceFeed
+			channelData, err := fetchChannelData(device)
+			if err != nil {
+				log.Fatal(err)
 			}
-			df.Feed = append(df.Feed, item)
-		}
+			df.ID = device.ID
+			df.Name = channelData.Channel.Name
+			df.Lat = device.Lat
+			df.Lon = device.Lon
+			df.Tempf = device.Tempf
 
-		if err := postDeviceMetrics(&df); err != nil {
-			log.Fatal(err)
-		}
+			startTimestamp := channelData.Feed[0].CreatedAt.Unix()
+			for i, f := range channelData.Feed {
+				var t int64
+				if i == 0 {
+					t = f.CreatedAt.Unix()
+				} else {
+					t = f.CreatedAt.Unix() - startTimestamp
+				}
 
-		// j, err := json.Marshal(df)
-		// if err != nil {
-		// 	log.Fatal(err)
-		// }
-		// if err := ioutil.WriteFile(fmt.Sprintf("feeds/%d.json", df.ID), j, 0644); err != nil {
-		// 	log.Fatal(err)
-		// }
+				item := &FeedItem{
+					Timestamp: t,
+					PM25:      f.PM25,
+				}
+				df.Feed = append(df.Feed, item)
+			}
+
+			if err := postDeviceMetrics(&df); err != nil {
+				log.Fatal(err)
+			}
+
+			// j, err := json.MarshalIndent(df, "", "  ")
+			// if err != nil {
+			// 	log.Fatal(err)
+			// }
+			// if err := ioutil.WriteFile(fmt.Sprintf("feeds/%d.json", df.ID), j, 0644); err != nil {
+			// 	log.Fatal(err)
+			// }
+		}
+		time.Sleep(time.Duration(3) * time.Minute)
 	}
 }
 
+// https://www.mathworks.com/help/thingspeak/readdata.html
 func thingspeakURL(channelID, channelKey string) string {
 	return fmt.Sprintf("%s/channels/%s/feeds.json?api_key=%s&results=20", thingspeakBaseURL, channelID, channelKey)
 }

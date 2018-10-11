@@ -4,6 +4,7 @@
   "description": "BCHDevcon Hackathon Project",
   "main": "rpc.js",
   "scripts": {
+    "server": "node rpc.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

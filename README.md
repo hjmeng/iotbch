@@ -3,20 +3,54 @@ iotbch
 
 BCHDevcon 2019 Hackathon Project
 
+# Introduction
+
+Internet of Things (IoT) is gaining popularity. A good example is PurpleAir.com. Users buy a PurpleAir
+air pollution monitor and connect to their wifi. The monitor submits PM2.5 data to PurpleAir server. However, the user does not have many options when it comes to analyzing their own data or their neighborhood data.
+
 # Goal
 
-Provide a simple API for any IoT device to post data feed to store compressed data on BCH.
-Provide enterprise grade tool to visualize the data.
+Provide a simple API for any IoT device to post data on BCH.
+Compress the raw IoT data to fully utilize the OP_RETURN field.
+Provide enterprise grade tool to analyze and visualize the data.
+
+# Benefits
+* Permanent storage on BCH for user generated IoT
+* Bring ETL tool to BCH to organize the OP_RETURN
+
 
 # Tasks
 
 1. Obtain Purple Air data feed from https://github.com/bomeara/purpleairpy/blob/master/api.md
 2. Sample 4 devices [devices.json](./devices.json)
-3. Post datafeed to IOTBCH API
-* Create a template from the json datafeed.
-* Compress the datafeed.
-* Store the template on database AWS.
+3. Post datafeed to IoTBCH API
+* Create a [template](./protobuf/metrics.proto)) from the json datafeed.
+* Compress the datafeed into byte stream.
 * Push compressed data to BCH testnet in the OP_RETURN field
+
+{ blockchain: 'BCH',
+  to_addr: 'qr8ngds6j7ww428mud7fz376z5vj0dn4mgx32xuv9a',
+    message: <Buffer 49 6f 54 0a 09 70 75 72 70 6c 65 61 69 72 10 c9 7d 1a 06 08 a
+    5 b7 fd dd 05 1a 06 08 f5 b7 fd dd 05 1a 06 08 c5 b8 fd dd 05 1a 06 08 95 b9 fd
+    dd 05 1a ... > }
+    { txid: '698f2d7a54219f0df4c40d257fcdec64249e449d75ceac82ab6c3a0b430b4a14',
+      vout: 2,
+        address: 'bchtest:qq3v84fq63r09x2uwrvkf6h0uwzcm93hhutk2md8vn',
+	  account: '',
+	    scriptPubKey: '76a91422c3d520d446f2995c70d964eaefe3858d9637bf88ac',
+	      amount: 0.18750096,
+	        confirmations: 18,
+		  spendable: true,
+		    solvable: true,
+		      safe: true }
+
+
+TXID on testnet
+
+4531054d6b6a55796110d193b74ccccfde6149ec292d513d2c581aba48e82713
+
+https://www.blocktrail.com/tBCC/tx/4531054d6b6a55796110d193b74ccccfde6149ec292d513d2c581aba48e82713
+
 4. Reconstruction
 * Retrieve compressed data from BCH OP_RETURN.
 * Retrieve template from AWS to reconstruct original datafeed in json.

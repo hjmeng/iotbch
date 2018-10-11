@@ -13,6 +13,7 @@ Internet of Things (IoT) is gaining popularity. A good example is [PurpleAir.com
 * Proof of ownership of the data.
 * Compress the raw IoT data to fully utilize the OP_RETURN field at 50% saving, 38 samples per tx. 
 * Provide enterprise grade tool to analyze and visualize the data.
+* Increase adoption and usage of BCH via IoT devices.
 
 # Benefits
 * Permanent storage on BCH for user generated IoT data

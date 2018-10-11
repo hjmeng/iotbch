@@ -116,7 +116,7 @@ func main() {
 
 // https://www.mathworks.com/help/thingspeak/readdata.html
 func thingspeakURL(channelID, channelKey string) string {
-	return fmt.Sprintf("%s/channels/%s/feeds.json?api_key=%s&results=20", thingspeakBaseURL, channelID, channelKey)
+	return fmt.Sprintf("%s/channels/%s/feeds.json?api_key=%s&results=38", thingspeakBaseURL, channelID, channelKey)
 }
 
 func fetchChannelData(device *PurpleAir) (*ThingSpeakChannel, error) {

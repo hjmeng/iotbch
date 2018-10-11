@@ -2,6 +2,7 @@ var PROTO_PATH = __dirname + '/protobuf/metrics.proto';
 var grpc = require('grpc');
 var protoLoader = require('@grpc/proto-loader');
 var util = require('./utility.js');
+var pb = require('./protobuf/metrics_pb.js')
 var packageDefinition = protoLoader.loadSync(PROTO_PATH, {
   keepCase: true,
   longs: String,
@@ -13,8 +14,19 @@ var protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
 var deviceMetrics = protoDescriptor.DeviceMetrics;
 
 async function addDeviceMetrics(call) {
-  message = call.request.feed[0];
-  console.log(message);
+  var feed = new pb.Feed;
+  feed.setDeviceId(call.request.feed.device_id);
+  feed.setTemplateId("purpleair");
+  var message;
+  call.request.feed.feed_items.forEach((f) => {
+    var feedItem = new pb.FeedItem;
+    feedItem.setTs(f["ts"]);
+    feedItem.setPm25(f["pm_2.5"]);
+
+    feed.addFeedItems(feedItem);
+    message = feed.serializeBinary();
+  });
+
   try {
     var tx = await util.sendTX({
       "blockchain": 'BCH',

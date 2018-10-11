@@ -102,7 +102,7 @@ func main() {
 }
 
 func thingspeakURL(channelID, channelKey string) string {
-	return fmt.Sprintf("%s/channels/%s/feeds.json?api_key=%s&days=7", thingspeakBaseURL, channelID, channelKey)
+	return fmt.Sprintf("%s/channels/%s/feeds.json?api_key=%s&results=20", thingspeakBaseURL, channelID, channelKey)
 }
 
 func fetchChannelData(device *PurpleAir) (*ThingSpeakChannel, error) {
@@ -139,7 +139,10 @@ func buildMetrics(df *DeviceFeed) *pb.Device {
 		Latitude:  df.Lat,
 		Longitude: df.Lon,
 		TempF:     df.Tempf,
-		Feed:      items,
+		Feed: &pb.Feed{
+			DeviceId:  df.ID,
+			FeedItems: items,
+		},
 	}
 }
 
